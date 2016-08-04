@@ -1,35 +1,53 @@
 #include<bits/stdc++.h>
-
+#define pb push_back
+ 
 using namespace std;
-
+ 
+int n,m,i,j,u,v;
+int a[2002][2002];
+int visited[2002];
+bool dfs(int u){
+     visited[u]=1;
+    queue<int>st;
+    st.push(u);
+    while (!st.empty()){
+        i = st.front();
+        st.pop();
+        for (j=1;j<=n;j++){
+            if (a[i][j] && visited[j] == -1){
+                visited[j] = 1-visited[i];
+                st.push(j);
+            }
+            else if (a[i][j] && visited[j] == visited[i]) return false;
+        }
+    }
+    return true;
+}
+ 
 int main(){
-int t,j;
-cin>>t;
-map<int,int>mp1;
-map<int,int>mp2;
-map<int,int>:: iterator it;
-j=1;
+int t;
+scanf("%d",&t);
+int j=1;
 while(t--){
-    int n,m,i,a,b;
-    cin>>n>>m;
-    for(i=1;i<=m;i++){
-        cin>>a>>b;
-        mp1[a]++;
-        mp2[b]++;
-    }
-    int flag=0;
-    for(it=mp1.begin();it!=mp1.end();it++){
-        int val=it->first;
-        if(mp2[val]) {flag=1; break;}
-    }
-     cout<<"Scenario #"<<j<<":"<<endl;
-     if(flag){
-        cout<<"Suspicious bugs found!"<<endl;
-     }
-     else cout<<"No suspicious bugs found!"<<endl;
-    j++;
-    mp1.clear();mp2.clear();
+   memset(a,0,sizeof(a));
+   scanf("%d %d",&n,&m);
+for(i=0;i<m;i++){
+    scanf("%d %d",&u,&v);
+    a[u][v]=1;
+    a[v][u]=1;
 }
-
+for(i=1;i<=n;i++) visited[i]=-1;
+int flag=0;
+for(i=1;i<=n;i++){
+        if(visited[i]==-1){
+    if(!dfs(i)){ flag=1; break;}
+    }
+}
+ 
+ 
+if(flag)  printf("Scenario #%d:\nSuspicious bugs found!\n",j);
+else printf("Scenario #%d:\nNo suspicious bugs found!\n",j);
+ 
+j++;
+}
 return 0;
-}
